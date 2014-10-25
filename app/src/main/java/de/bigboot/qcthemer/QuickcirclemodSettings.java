@@ -142,7 +142,6 @@ public class QuickcirclemodSettings extends Activity {
     }
 
     private void setApplied(boolean isApplied) {
-        isApplied = false;
         applyButton.setVisibility(isApplied?View.INVISIBLE:View.VISIBLE);
         applied.setVisibility(isApplied?View.VISIBLE:View.GONE);
     }
