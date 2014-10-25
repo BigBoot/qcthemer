@@ -150,6 +150,7 @@ public class QuickcirclemodSettings extends Activity {
     protected void delete() {
         if(currentClock != null) {
             adapter.deleteClock(currentClock);
+            loadClockInfo(adapter.getCount()-1);
         }
     }
 
@@ -225,6 +226,7 @@ public class QuickcirclemodSettings extends Activity {
                 Clock clock = importZip(data.getData().getPath());
                 adapter.addClock(clock);
                 viewPager.setCurrentItem(adapter.getCount()-1);
+                loadClockInfo(adapter.getCount()-1);
             }
         }
     }
