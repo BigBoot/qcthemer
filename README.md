@@ -2,6 +2,7 @@
 
 Quick Circle Themer is a Xposed Module which allows you to easily change the watchfaces of the LG G3 Quick Circle Case
 
+![Screenshot](http://bigboot.github.io/qcthemer/images/qcthemer.png)
 
 ##Theme creation
 See Getting the original resources to get an Idea about the files to modify.
