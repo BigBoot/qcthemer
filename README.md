@@ -16,7 +16,7 @@ Once you've got your modified files, you need to package them for the app.
       <id>com.coolguy.awesome</id>
       <author>CoolGuy42</author>
       <description>Some description</description>
-      <activate>2</activate><!--Automatically switch to second clock-->
+      <activate>0</activate><!--Automatically switch to first clock-->
       <replaces>
           <file>b2_quickcircle_analog_style03_hour.png</file>
           <file>b2_quickcircle_analog_style03_minute.png</file>
