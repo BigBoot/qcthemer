@@ -5,7 +5,7 @@ Quick Circle Themer is a Xposed Module which allows you to easily change the wat
 ![Screenshot](http://bigboot.github.io/qcthemer/images/qcthemer.png)
 
 ##Download
-Download the apk file [here](http://bigboot.github.io/qcthemer/app/qcthemer.apk)
+Download the apk file [here](http://dl-xda.xposed.info/modules/de.bigboot.qcthemer_v1_cc874c.apk)
 
 ##Theme creation
 See Getting the original resources to get an Idea about the files to modify.
