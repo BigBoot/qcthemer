@@ -149,6 +149,17 @@ public class QuickcirclemodSettings extends Activity {
     @OptionsItem(R.id.action_delete)
     protected void delete() {
         if(currentClock != null) {
+            String path = getFilesDir() + "/" + currentClock.getId() + "/";
+            File file = new File(path);
+
+            if (file.exists()) {
+                String deleteCmd = "rm -r " + path;
+                Runtime runtime = Runtime.getRuntime();
+                try {
+                    runtime.exec(deleteCmd);
+                } catch (IOException e) { }
+            }
+
             adapter.deleteClock(currentClock);
             loadClockInfo(adapter.getCount()-1);
         }
