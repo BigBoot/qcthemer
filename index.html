@@ -1,0 +1,115 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Quick Circle Themer by BigBoot</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Quick Circle Themer</h1>
+        <p>Theme manager for LG G3 QuickCircle watchfaces</p>
+        <p class="view"><a href="https://github.com/BigBoot/qcthemer">View the Project on GitHub <small>BigBoot/qcthemer</small></a></p>
+        <ul>
+          <li><a href="https://github.com/BigBoot/qcthemer/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/BigBoot/qcthemer/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/BigBoot/qcthemer">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a name="quick-circle-themer" class="anchor" href="#quick-circle-themer"><span class="octicon octicon-link"></span></a>Quick Circle Themer</h1>
+
+<p>Quick Circle Themer is a Xposed Module which allows you to easily change the watchfaces of the LG G3 Quick Circle Case</p>
+
+<h2>
+<a name="theme-creation" class="anchor" href="#theme-creation"><span class="octicon octicon-link"></span></a>Theme creation</h2>
+
+<p>See Getting the original resources to get an Idea about the files to modify.
+Once you've got your modified files, you need to package them for the app.</p>
+
+<ol>
+<li>
+<p>You need a clock.xml, here's an example:</p>
+
+<div class="highlight highlight-xml"><pre><span class="cp">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<span class="nt">&lt;clock&gt;</span>
+    <span class="nt">&lt;title&gt;</span>Awesome clock<span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;id&gt;</span>com.coolguy.awesome<span class="nt">&lt;/id&gt;</span>
+    <span class="nt">&lt;author&gt;</span>CoolGuy42<span class="nt">&lt;/author&gt;</span>
+    <span class="nt">&lt;description&gt;</span>Some description<span class="nt">&lt;/description&gt;</span>
+    <span class="nt">&lt;activate&gt;</span>0<span class="nt">&lt;/activate&gt;</span><span class="c">&lt;!--Automatically switch to first clock--&gt;</span>
+    <span class="nt">&lt;replaces&gt;</span>
+        <span class="nt">&lt;file&gt;</span>b2_quickcircle_analog_style03_hour.png<span class="nt">&lt;/file&gt;</span>
+        <span class="nt">&lt;file&gt;</span>b2_quickcircle_analog_style03_minute.png<span class="nt">&lt;/file&gt;</span>
+        <span class="nt">&lt;file&gt;</span>b2_quickcircle_analog_style03_second.png<span class="nt">&lt;/file&gt;</span>
+        <span class="nt">&lt;file&gt;</span>b2_quickcircle_analog_style03_bg.png<span class="nt">&lt;/file&gt;</span>
+    <span class="nt">&lt;/replaces&gt;</span>
+<span class="nt">&lt;/clock&gt;</span>
+</pre></div>
+</li>
+<li>You should optionally provide a preview.png which will be shown in the watchface chooser</li>
+<li>Now zip up all your files, in the example you would zip the following files:</li>
+</ol>
+
+<pre><code>clock.xml
+preview.png   
+b2_quickcircle_analog_style03_hour.png
+b2_quickcircle_analog_style03_minute.png
+b2_quickcircle_analog_style03_second.png
+b2_quickcircle_analog_style03_bg.png
+</code></pre>
+
+<h3>
+<a name="getting-the-original-resources" class="anchor" href="#getting-the-original-resources"><span class="octicon octicon-link"></span></a>Getting the original resources</h3>
+
+<ol>
+<li>Make sure your phone is rooted and your adb is working</li>
+<li>Get your LGAlarmClock.apk from your phone:
+<code>sh
+adb pull /system/priv-app/LGAlarmClock.apk LGAlarmClock.apk
+</code>
+</li>
+<li>Extract LGAlarmClock.apk</li>
+<li>The original resource are in <code>LGAlarmClock/res/raw-xxxhdpi/</code>
+</li>
+</ol>
+
+<h2>
+<a name="version" class="anchor" href="#version"><span class="octicon octicon-link"></span></a>Version</h2>
+
+<p>0.1</p>
+
+<h2>
+<a name="acknowledgements" class="anchor" href="#acknowledgements"><span class="octicon octicon-link"></span></a>Acknowledgements</h2>
+
+<ul>
+<li>Excilys team for <a href="https://github.com/excilys/androidannotations/wiki">Android annotations</a>
+</li>
+<li>Jake Wharton for <a href="http://viewpagerindicator.com/">viewpagerindicator</a>.</li>
+<li>rovo89, Tungstwenty for <a href="http://repo.xposed.info/">Xposed Framework</a>
+</li>
+<li>Yaovst for <a href="https://github.com/yoavst/rolexquickcircle">rolexquickcircle</a>
+</li>
+<li>Kevin Slaton for the example watchface</li>
+</ul>
+      </section>
+    </div>
+    <footer>
+      <p>Project maintained by <a href="https://github.com/BigBoot">BigBoot</a></p>
+      <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
