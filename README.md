@@ -4,6 +4,9 @@ Quick Circle Themer is a Xposed Module which allows you to easily change the wat
 
 ![Screenshot](http://bigboot.github.io/qcthemer/images/qcthemer.png)
 
+##Download
+Download the apk file [here](http://bigboot.github.io/qcthemer/app/qcthemer.apk)
+
 ##Theme creation
 See Getting the original resources to get an Idea about the files to modify.
 Once you've got your modified files, you need to package them for the app.
@@ -53,5 +56,5 @@ b2_quickcircle_analog_style03_bg.png
 * Excilys team for [Android annotations](https://github.com/excilys/androidannotations/wiki)
 * Jake Wharton for [viewpagerindicator](http://viewpagerindicator.com/).
 * rovo89, Tungstwenty for [Xposed Framework](http://repo.xposed.info/)
-* Yaovst for [rolexquickcircle](https://github.com/yoavst/rolexquickcircle)
+* Yoavst for [rolexquickcircle](https://github.com/yoavst/rolexquickcircle)
 * Kevin Slaton for the example watchface
