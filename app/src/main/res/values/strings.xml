@@ -9,7 +9,7 @@
     <string name="later">Reboot later</string>
     <string name="apply_theme">Apply theme</string>
     <string name="apply_theme_text" >Please reboot to apply changes.
-Quick Circle Themes can try to apply the changes without a reboot. Pleas keep in mind that this feature is  highly experimental an may cause instabilities. If you encounter any Problems please reboot.
+Quick Circle Themes can try to apply the changes without a reboot. Pleas keep in mind that this feature is highly experimental and may cause instabilities. If you encounter any Problems please reboot.
     </string>
     <string name="author">Author:</string>
     <string name="description">Description:</string>
