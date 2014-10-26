@@ -2,8 +2,10 @@ package de.bigboot.qcthemer;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.Button;
@@ -26,8 +28,10 @@ import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -174,6 +178,30 @@ public class QuickcirclemodSettings extends Activity {
         startActivityForResult(intent, IMPORT_FILE_REQUEST_CODE);
     }
 
+    private Clock importZip(InputStream zip) throws ImportClockException {
+        try {
+            File outputDir = getCacheDir();
+            File outputFile = File.createTempFile("zip", ".zip", outputDir);
+
+            BufferedInputStream in = new BufferedInputStream(zip);
+            BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(outputFile));
+
+            byte buffer[] = new byte[1024];
+            int r;
+            while ((r = in.read(buffer, 0, buffer.length)) != -1) {
+                out.write(buffer, 0, r);
+            }
+            out.close();
+            in.close();
+
+            Clock c = importZip(outputFile.getAbsolutePath());
+            outputFile.delete();
+            return c;
+        } catch (IOException e) {
+            throw new ImportClockException(ImportClockException.Error.READ_ERROR);
+        }
+    }
+
     private Clock importZip(String zip) throws ImportClockException {
         try {
             ZipFile zipFile = new ZipFile(zip);
@@ -236,33 +264,81 @@ public class QuickcirclemodSettings extends Activity {
         if (requestCode == IMPORT_FILE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 try {
-                    Clock clock = importZip(data.getData().getPath());
-                    adapter.addClock(clock);
-                    viewPager.setCurrentItem(adapter.getCount() - 1);
-                    loadClockInfo(adapter.getCount() - 1);
-                } catch (ImportClockException e) {
-                    int msg;
-                    switch (e.getError()) {
-                        case NO_CLOCK_XML:
-                            msg = R.string.err_no_xml;
-                            break;
-                        case INVALID_CLOCK_XML:
-                            msg = R.string.err_invalid_xml;
-                            break;
-                        case READ_ERROR:
-                            msg = R.string.err_read_error;
-                            break;
-                        case MISSING_FILE:
-                            msg = R.string.err_missing_file;
-                            break;
+                    String path = data.getData().getPath();
+                    final File f = new File(path);
+                    if(!f.exists()) {
+                        try {
+                            new AsyncTask<InputStream, Void, Clock>() {
+                                ProgressDialog ringProgressDialog;
+                                ImportClockException exception = null;
 
-                        default:
-                            msg = R.string.err_import;
+                                @Override
+                                protected void onPreExecute() {
+                                    ringProgressDialog = ProgressDialog.show(QuickcirclemodSettings.this, "Please wait ...", "Importing Zip", true);
+                                    ringProgressDialog.setCancelable(false);
+                                }
+
+                                @Override
+                                protected void onPostExecute(Clock c) {
+                                    ringProgressDialog.dismiss();
+                                    if(exception != null) {
+                                        handleImportException(exception);
+                                        return;
+                                    }
+                                    adapter.addClock(c);
+                                    viewPager.setCurrentItem(adapter.getCount() - 1);
+                                    loadClockInfo(adapter.getCount() - 1);
+                                }
+
+                                @Override
+                                protected Clock doInBackground(InputStream... streams) {
+                                    InputStream in = streams[streams.length-1];
+                                    try {
+                                        return importZip(in);
+                                    } catch (ImportClockException e) {
+                                        exception = e;
+                                    }
+                                    return null;
+                                }
+                            }.execute(getContentResolver().openInputStream(data.getData()));
+                        } catch (FileNotFoundException e) {
+                            handleImportException(new ImportClockException(ImportClockException.Error.READ_ERROR));
+                        }
+
+                    } else {
+                        Clock c = importZip(path);
+                        adapter.addClock(c);
+                        viewPager.setCurrentItem(adapter.getCount() - 1);
+                        loadClockInfo(adapter.getCount() - 1);
                     }
-                    Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+                } catch (ImportClockException e) {
+                    handleImportException(e);
                 }
             }
         }
+    }
+
+    private void handleImportException(ImportClockException e) {
+
+        int msg;
+        switch (e.getError()) {
+            case NO_CLOCK_XML:
+                msg = R.string.err_no_xml;
+                break;
+            case INVALID_CLOCK_XML:
+                msg = R.string.err_invalid_xml;
+                break;
+            case READ_ERROR:
+                msg = R.string.err_read_error;
+                break;
+            case MISSING_FILE:
+                msg = R.string.err_missing_file;
+                break;
+
+            default:
+                msg = R.string.err_import;
+        }
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
     private boolean setFilePermission(File f, String permission) {
