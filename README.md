@@ -5,7 +5,7 @@ Quick Circle Themer is a Xposed Module which allows you to easily change the wat
 ![Screenshot](http://bigboot.github.io/qcthemer/images/qcthemer.png)
 
 ##Download
-Download the apk file [here](http://dl-xda.xposed.info/modules/de.bigboot.qcthemer_v1_cc874c.apk)
+Download the apk file [here](http://dl-xda.xposed.info/modules/de.bigboot.qcthemer_v2_0e2740.apk)
 
 ##Theme creation
 See Getting the original resources to get an Idea about the files to modify.
@@ -50,7 +50,7 @@ b2_quickcircle_analog_style03_bg.png
 4. The original resource are in ```LGAlarmClock/res/raw-xxxhdpi/```
 
 ## Version
-0.1
+0.2
 
 ## Acknowledgements 
 * Excilys team for [Android annotations](https://github.com/excilys/androidannotations/wiki)
