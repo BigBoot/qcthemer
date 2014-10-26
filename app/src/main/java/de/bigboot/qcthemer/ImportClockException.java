@@ -13,6 +13,10 @@ class ImportClockException extends RuntimeException {
 
     private Error error;
 
+    public Error getError() {
+        return error;
+    }
+
     @Override
     public String getMessage() {
         switch (error) {

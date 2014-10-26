@@ -15,4 +15,9 @@ Quick Circle Themes can try to apply the changes without a reboot. Pleas keep in
     <string name="description">Description:</string>
     <string name="active_theme">Active Theme</string>
     <string name="no_watchfaces">No Watchfaces installed\nUse the import button to import new watchfaces</string>
+    <string name="err_no_xml">Zip file doesn\'t contain a clock.xml</string>
+    <string name="err_invalid_xml">clock.xml is not valid</string>
+    <string name="err_read_error">Error reading file or file is not a zip file</string>
+    <string name="err_missing_file">A replaced file is not present in the zip</string>
+    <string name="err_import">Import error</string>
 </resources>

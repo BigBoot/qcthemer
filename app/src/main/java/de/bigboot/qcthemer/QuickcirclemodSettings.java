@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.viewpagerindicator.CirclePageIndicator;
 
@@ -234,10 +235,32 @@ public class QuickcirclemodSettings extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == IMPORT_FILE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                Clock clock = importZip(data.getData().getPath());
-                adapter.addClock(clock);
-                viewPager.setCurrentItem(adapter.getCount()-1);
-                loadClockInfo(adapter.getCount()-1);
+                try {
+                    Clock clock = importZip(data.getData().getPath());
+                    adapter.addClock(clock);
+                    viewPager.setCurrentItem(adapter.getCount() - 1);
+                    loadClockInfo(adapter.getCount() - 1);
+                } catch (ImportClockException e) {
+                    int msg;
+                    switch (e.getError()) {
+                        case NO_CLOCK_XML:
+                            msg = R.string.err_no_xml;
+                            break;
+                        case INVALID_CLOCK_XML:
+                            msg = R.string.err_invalid_xml;
+                            break;
+                        case READ_ERROR:
+                            msg = R.string.err_read_error;
+                            break;
+                        case MISSING_FILE:
+                            msg = R.string.err_missing_file;
+                            break;
+
+                        default:
+                            msg = R.string.err_import;
+                    }
+                    Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+                }
             }
         }
     }
