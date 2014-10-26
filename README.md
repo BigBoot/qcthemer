@@ -50,7 +50,7 @@ b2_quickcircle_analog_style03_bg.png
 4. The original resource are in ```LGAlarmClock/res/raw-xxxhdpi/```
 
 ## Version
-0.2
+0.2.1
 
 ## Acknowledgements 
 * Excilys team for [Android annotations](https://github.com/excilys/androidannotations/wiki)
