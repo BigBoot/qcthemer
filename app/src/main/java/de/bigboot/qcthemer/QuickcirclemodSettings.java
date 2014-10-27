@@ -5,7 +5,9 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.Button;
@@ -121,7 +123,7 @@ public class QuickcirclemodSettings extends Activity {
             prefs.setActiveClock(null);
         } else {
             prefs.setActiveClock(currentClock);
-            if(currentClock.getActivate() >= 0)
+            if(currentClock.getActivate() >= 0 && currentClock.getDevice() == Clock.Device.G3)
                 executeSuCommand("echo \"<?xml version='1.0' encoding='utf-8' standalone='yes'?><map><int name=\\\"cover_index\\\" value=\\\"" + currentClock.getActivate() + "\\\" /></map>\" > /data/data/com.lge.clock/shared_prefs/quick_cover.xml");
             setApplied(true);
         }
@@ -263,59 +265,54 @@ public class QuickcirclemodSettings extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == IMPORT_FILE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                try {
-                    String path = data.getData().getPath();
-                    final File f = new File(path);
-                    if(!f.exists()) {
-                        try {
-                            new AsyncTask<InputStream, Void, Clock>() {
-                                ProgressDialog ringProgressDialog;
-                                ImportClockException exception = null;
+                new AsyncTask<Uri, Void, Clock>() {
+                    ProgressDialog ringProgressDialog;
+                    ImportClockException exception = null;
 
-                                @Override
-                                protected void onPreExecute() {
-                                    ringProgressDialog = ProgressDialog.show(QuickcirclemodSettings.this, "Please wait ...", "Importing Zip", true);
-                                    ringProgressDialog.setCancelable(false);
-                                }
-
-                                @Override
-                                protected void onPostExecute(Clock c) {
-                                    ringProgressDialog.dismiss();
-                                    if(exception != null) {
-                                        handleImportException(exception);
-                                        return;
-                                    }
-                                    adapter.addClock(c);
-                                    viewPager.setCurrentItem(adapter.getCount() - 1);
-                                    loadClockInfo(adapter.getCount() - 1);
-                                }
-
-                                @Override
-                                protected Clock doInBackground(InputStream... streams) {
-                                    InputStream in = streams[streams.length-1];
-                                    try {
-                                        return importZip(in);
-                                    } catch (ImportClockException e) {
-                                        exception = e;
-                                    }
-                                    return null;
-                                }
-                            }.execute(getContentResolver().openInputStream(data.getData()));
-                        } catch (FileNotFoundException e) {
-                            handleImportException(new ImportClockException(ImportClockException.Error.READ_ERROR));
-                        }
-
-                    } else {
-                        Clock c = importZip(path);
-                        adapter.addClock(c);
-                        viewPager.setCurrentItem(adapter.getCount() - 1);
-                        loadClockInfo(adapter.getCount() - 1);
+                    @Override
+                    protected void onPreExecute() {
+                        ringProgressDialog = ProgressDialog.show(QuickcirclemodSettings.this, "Please wait ...", "Importing Zip", true);
+                        ringProgressDialog.setCancelable(false);
                     }
-                } catch (ImportClockException e) {
-                    handleImportException(e);
-                }
+
+                    @Override
+                    protected void onPostExecute(Clock c) {
+                        ringProgressDialog.dismiss();
+                        if(exception != null) {
+                            handleImportException(exception);
+                            return;
+                        }
+                        addImportedClock(c);
+                    }
+
+                    @Override
+                    protected Clock doInBackground(Uri... uris) {
+                        try {
+                            InputStream in = getContentResolver().openInputStream(uris[uris.length-1]);;
+                            return importZip(in);
+                        } catch (ImportClockException e) {
+                            exception = e;
+                        } catch (FileNotFoundException e) {
+                            exception = new ImportClockException(ImportClockException.Error.READ_ERROR);
+                        }
+                        return null;
+                    }
+                }.execute(data.getData());
             }
         }
+    }
+
+    private void addImportedClock(Clock c) {
+        if (!Build.DEVICE.equalsIgnoreCase(c.getDevice().name())) {
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.wrong_device)
+                    .setMessage(getResources().getString(R.string.wrong_device_text, c.getDevice().name().toUpperCase(), Build.DEVICE.toUpperCase()))
+                    .setPositiveButton(android.R.string.ok, null)
+                    .show();
+        }
+        adapter.addClock(c);
+        viewPager.setCurrentItem(adapter.getCount() - 1);
+        loadClockInfo(adapter.getCount() - 1);
     }
 
     private void handleImportException(ImportClockException e) {

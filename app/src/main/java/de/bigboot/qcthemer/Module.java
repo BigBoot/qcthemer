@@ -3,11 +3,13 @@ package de.bigboot.qcthemer;
 import android.content.res.XResources;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 
 import java.io.IOException;
 
 import de.robv.android.xposed.IXposedHookInitPackageResources;
 import de.robv.android.xposed.XSharedPreferences;
+import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources;
 
 /**
@@ -17,7 +19,8 @@ public class Module implements IXposedHookInitPackageResources {
 
 	@Override
 	public void handleInitPackageResources(XC_InitPackageResources.InitPackageResourcesParam resParam) throws Throwable {
-		if (!resParam.packageName.equals("com.lge.clock")) return;
+        if(!resParam.packageName.equals("com.lge.appwidget.clock") && !resParam.packageName.equals("com.lge.clock"))
+            return;
 
         final String moduleName = QuickcirclemodSettings.class.getPackage().getName();
 
@@ -26,18 +29,26 @@ public class Module implements IXposedHookInitPackageResources {
         if(c == null)
             return;
 
+        String resourcetype;
+        if(Build.DEVICE.equals("g2")) {
+            resourcetype = "drawable";
+        } else {
+            resourcetype = "raw";
+        }
+
         for(final String file : c.getFiles()) {
             try {
-                resParam.res.setReplacement("com.lge.clock", "raw", removeExtension(file), new XResources.DrawableLoader() {
+               resParam.res.setReplacement(resParam.packageName, resourcetype, removeExtension(file), new XResources.DrawableLoader() {
                     @Override
                     public Drawable newDrawable(XResources xResources, int i) throws Throwable {
                         BitmapDrawable drawable = new BitmapDrawable("/data/data/" + moduleName + "/files/" + c.getId() + "/" + file);
-                        drawable.setTargetDensity(640);
+                        drawable.setTargetDensity(c.getDevice() == Clock.Device.G2 ? 480 : 640);
                         return drawable;
                     }
                 });
 
             } catch (Throwable ex) {
+                XposedBridge.log(ex);
             }
         }
 	}

@@ -8,8 +8,7 @@
     <string name="apply">Apply</string>
     <string name="later">Reboot later</string>
     <string name="apply_theme">Apply theme</string>
-    <string name="apply_theme_text" >Please reboot to apply changes.
-Quick Circle Themes can try to apply the changes without a reboot. Pleas keep in mind that this feature is highly experimental and may cause instabilities. If you encounter any Problems please reboot.
+    <string name="apply_theme_text" >Please reboot to apply changes.\nQuick Circle Themes can try to apply the changes without a reboot. Pleas keep in mind that this feature is highly experimental and may cause instabilities. If you encounter any Problems please reboot.
     </string>
     <string name="author">Author:</string>
     <string name="description">Description:</string>
@@ -20,4 +19,6 @@ Quick Circle Themes can try to apply the changes without a reboot. Pleas keep in
     <string name="err_read_error">Error reading file or file is not a zip file</string>
     <string name="err_missing_file">A replaced file is not present in the zip</string>
     <string name="err_import">Import error</string>
+    <string name="wrong_device">Wrong device</string>
+    <string name="wrong_device_text">The theme you\'ve imported seems to be for the device %1$s, but your device seems to be a %2$s. Please note that themes for the wrong device won\'t work. If this is an error, please contact the author of the theme to fix it.</string>
 </resources>

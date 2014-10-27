@@ -16,10 +16,16 @@ import java.util.List;
 * Created by Marco Kirchner
 */
 public class Clock {
+    public enum Device {
+        G2,
+        G3
+    }
+
     private String title = null;
     private String id = null;
     private String author = null;
     private String description = null;
+    private Device device = Device.G3;
     private List<String> files = new ArrayList<String>();
     private int activate = -1;
 
@@ -37,6 +43,10 @@ public class Clock {
 
     public String getDescription() {
         return description;
+    }
+
+    public Device getDevice() {
+        return device;
     }
 
     public List<String> getFiles() {
@@ -81,6 +91,8 @@ public class Clock {
                             clock.files.add(xpp.nextText());
                         else if(xpp.getName().equalsIgnoreCase("activate"))
                             clock.activate = Integer.parseInt(xpp.nextText());
+                        else if(xpp.getName().equalsIgnoreCase("device"))
+                            clock.device = xpp.nextText().equalsIgnoreCase("G2") ? Device.G2 : Device.G3;
                 }
                 eventType = xpp.next();
             }
@@ -101,6 +113,7 @@ public class Clock {
         "\t<author>" + author + "</author>\n" +
         "\t<description>" + description + "</description>\n" +
         "\t<activate>" + activate + "</activate>\n" +
+        "\t<device>" + device.name() + "</device>\n" +
         "\t<replaces>\n");
         for (String file : files)
             sb.append("\t\t<file>" + file + "</file>\n");
