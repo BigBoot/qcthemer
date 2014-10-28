@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<clock>
+	<title>Awesome Red</title>
+	<id>de.bigboot.qcthemer.g2_red</id>
+	<author>BigBoot</author>
+	<description>This watchface demonstrates the awesomeness of red</description>
+	<device>G2</device>
+	<replaces>
+		<file>lg_clock_square_bg.png</file>
+	</replaces>
+</clock>
